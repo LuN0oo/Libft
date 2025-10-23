@@ -6,30 +6,55 @@
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 14:59:48 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/16 16:38:41 by analaphi         ###   ########.fr       */
+/*   Updated: 2025/10/23 12:14:40 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_is_charset(char c, char charset)
+static void	free_split(char **tab, int count)
 {
-	if (charset == c)
-		return (1);
-	return (0);
-}
-
-static char	*ft_add_word(char *src, int size)
-{
-	int		i;
-	char	*dest;
+	int	i;
 
 	i = 0;
-	dest = NULL;
-	dest = malloc(sizeof(char) * (size + 1));
-	if (dest == NULL)
-		return (0);
-	while (src[i] && i < size)
+	while (i < count)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+static int	count_words(char const *str, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if ((str[i] != c) && (i == 0 || str[i - 1] == c))
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+static char	*ft_worddup(char const *src, char c)
+{
+	int		i;
+	int		len;
+	char	*dest;
+
+	len = 0;
+	while (src[len] && src[len] != c)
+		len++;
+	dest = malloc(sizeof(char) * (len + 1));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (src[i] && src[i] != c)
 	{
 		dest[i] = src[i];
 		i++;
@@ -38,63 +63,41 @@ static char	*ft_add_word(char *src, int size)
 	return (dest);
 }
 
-static int	ft_word_len(char *str, char charset)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && !ft_is_charset(str[i], charset))
-		i++;
-	return (i);
-}
-
-static int	ft_count_words(char *str, char charset)
+static int	fill_split(char **res, char const *s, char c)
 {
 	int	i;
 	int	count;
-	int	word_len;
 
 	i = 0;
 	count = 0;
-	word_len = 0;
-	while (str[i] != '\0')
+	while (s[i])
 	{
-		while (str[i] && ft_is_charset(str[i], charset))
-			i++;
-		word_len = ft_word_len(str + i, charset);
-		if (word_len)
+		if ((s[i] != c) && (i == 0 || s[i - 1] == c))
+		{
+			res[count] = ft_worddup(&s[i], c);
+			if (!res[count])
+			{
+				free_split(res, count);
+				return (0);
+			}
 			count++;
-		i += word_len;
-		word_len = 0;
+		}
+		i++;
 	}
-	return (count);
+	res[count] = NULL;
+	return (1);
 }
 
-char	**ft_split(char *str, char charset)
+char	**ft_split(char const *s, char c)
 {
-	int		count_words;
-	char	**arr;
-	int		word_len;
-	int		i;
-	int		j;
+	char	**res;
 
-	i = 0;
-	j = 0;
-	word_len = 0;
-	count_words = ft_count_words(str, charset);
-	arr = malloc(sizeof(char *) * (count_words + 1));
-	if (!arr)
+	if (!s)
 		return (NULL);
-	while (str[i] != '\0')
-	{
-		while (str[i] && ft_is_charset(str[i], charset))
-			i++;
-		word_len = ft_word_len(str + i, charset);
-		if (word_len)
-			arr[j++] = ft_add_word(str + i, word_len);
-		i += word_len;
-		word_len = 0;
-	}
-	arr[j] = NULL;
-	return (arr);
+	res = malloc(sizeof(char *) * (count_words(s, c) + 1));
+	if (!res)
+		return (NULL);
+	if (!fill_split(res, s, c))
+		return (NULL);
+	return (res);
 }

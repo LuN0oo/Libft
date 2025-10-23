@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 16:56:54 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/23 16:14:22 by analaphi         ###   ########.fr       */
+/*   Created: 2025/10/20 12:33:03 by analaphi          #+#    #+#             */
+/*   Updated: 2025/10/20 18:25:29 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	size_t	i;
-	size_t	j;
-	char	*str;
+	t_list	*tmp;
 
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	str = malloc(sizeof (char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
-	if (!str)
-		return (NULL);
-	while (s1[i] != '\0')
-		str[j++] = s1[i++];
-	i = 0;
-	while (s2[i] != '\0')
-		str[j++] = s2[i++];
-	str[j] = 0;
-	return (str);
+	if (!lst || !del)
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = tmp;
+	}
+	free(*lst);
+	*lst = NULL;
 }

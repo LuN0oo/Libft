@@ -6,29 +6,33 @@
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:41:14 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/15 13:41:43 by analaphi         ###   ########.fr       */
+/*   Updated: 2025/10/22 13:32:43 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	size_t	size_d;
-	size_t	size_s;
+	size_t	d;
+	size_t	s;
+	size_t	i;
 
-	size_d = ft_strlen(dst);
-	size_s = ft_strlen(src);
-	if (size_d >= size)
-		size_d = size;
-	if (size_d == size)
-		return (size + size_s);
-	if (size_s < size - size_d)
-		ft_memcpy(dst + size_d, src, size_s + 1);
-	else
+	d = 0;
+	s = 0;
+	if (!dest && size == 0)
+		return (ft_strlen(src));
+	while (dest[d] && d < size)
+		d++;
+	while (src[s])
+		s++;
+	i = 0;
+	while (src[i] && (d + i + 1) < size)
 	{
-		ft_memcpy(dst + size_d, src, size - size_d - 1);
-		dst[size - 1] = '\0';
+		dest[d + i] = src[i];
+		i++;
 	}
-	return (size_d + size_s);
+	if (d < size)
+		dest[d + i] = '\0';
+	return (d + s);
 }

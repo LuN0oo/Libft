@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 16:56:54 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/23 16:14:22 by analaphi         ###   ########.fr       */
+/*   Created: 2025/10/20 17:41:40 by analaphi          #+#    #+#             */
+/*   Updated: 2025/10/21 15:54:38 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	size_t	i;
-	size_t	j;
-	char	*str;
+	t_list	*tmp;
+	t_list	*new;
+	void	*data;
 
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
+	if (!lst || !f || !del)
 		return (NULL);
-	str = malloc(sizeof (char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
-	if (!str)
-		return (NULL);
-	while (s1[i] != '\0')
-		str[j++] = s1[i++];
-	i = 0;
-	while (s2[i] != '\0')
-		str[j++] = s2[i++];
-	str[j] = 0;
-	return (str);
+	new = NULL;
+	while (lst)
+	{
+		data = f(lst->content);
+		tmp = ft_lstnew(data);
+		if (!tmp)
+		{
+			del(data);
+			ft_lstclear(&new, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new, tmp);
+		lst = lst->next;
+	}
+	return (new);
 }

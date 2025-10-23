@@ -6,7 +6,7 @@
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:44:32 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/15 13:58:23 by analaphi         ###   ########.fr       */
+/*   Updated: 2025/10/23 16:31:23 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strdup(const char *src)
 	dest = NULL;
 	dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
 	if (dest == NULL)
-		return (0);
+		return (NULL);
 	while (src[i] != '\0')
 	{
 		dest[i] = src[i];

@@ -6,13 +6,13 @@
 /*   By: analaphi <analaphi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:38:19 by analaphi          #+#    #+#             */
-/*   Updated: 2025/10/16 18:52:59 by analaphi         ###   ########.fr       */
+/*   Updated: 2025/10/23 11:25:30 by analaphi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	char	*tmp;
 
@@ -22,5 +22,4 @@ void	*ft_bzero(void *s, size_t n)
 		*(tmp++) = 0;
 		n--;
 	}
-	return (s);
 }
